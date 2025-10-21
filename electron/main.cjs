@@ -9,8 +9,7 @@ function createWindow () {
       preload: path.join(__dirname, 'preload.js')
     }
   })
-
-  win.loadFile('index.html')
+  win.loadURL('http://localhost:5173')
 }
 
 app.whenReady().then(() => {
