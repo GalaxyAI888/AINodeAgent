@@ -1,16 +1,13 @@
-/** WARNING: DON'T EDIT THIS FILE */
-/** WARNING: DON'T EDIT THIS FILE */
-/** WARNING: DON'T EDIT THIS FILE */
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
 
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import tsconfigPaths from "vite-tsconfig-paths";
-
-function getPlugins() {
-  const plugins = [react(), tsconfigPaths()];
-  return plugins;
-}
-
+// https://vite.dev/config/
 export default defineConfig({
-  plugins: getPlugins(),
-});
+  plugins: [
+    react({
+      babel: {
+        plugins: [['babel-plugin-react-compiler']],
+      },
+    }),
+  ],
+})
