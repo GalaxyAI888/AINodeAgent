@@ -11,6 +11,8 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useMutation } from "@tanstack/react-query";
+import { LoginApi } from "@/api/auth/login";
 
 export const Route = createFileRoute("/auth/login")({
   component: RouteComponent,
@@ -19,11 +21,18 @@ export const Route = createFileRoute("/auth/login")({
 function RouteComponent() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const { mutate: loginMutate } = useMutation({
+    mutationKey: ["login"],
+    mutationFn: LoginApi,
+  });
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     // TODO: integrate API
-    // console.log({ email, password })
+    loginMutate({
+      username: "admin",
+      password: "123456",
+    });
   }
 
   return (
