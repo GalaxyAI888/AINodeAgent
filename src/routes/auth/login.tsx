@@ -1,5 +1,4 @@
-import * as React from "react";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import {
   Card,
   CardContent,
@@ -8,33 +7,74 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useMutation } from "@tanstack/react-query";
 import { LoginApi } from "@/api/auth/login";
+import { FormProvider, useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 
 export const Route = createFileRoute("/auth/login")({
   component: RouteComponent,
 });
 
+const Form = FormProvider;
+
+const formSchema = z.object({
+  username: z.string().min(2, {
+    message: "Username must be at least 2 characters.",
+  }),
+  password: z
+    .string()
+    .min(2, {
+      message: "密码至少2位",
+    })
+    .max(16, {
+      message: "密码最多16位",
+    }),
+  // .regex(
+  //   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+  //   {
+  //     message:
+  //       "密码至少包含一个大写字母,一个小写字母,一个数字,一个特殊字符,至少8位",
+  //   }
+  // ),
+});
+
 function RouteComponent() {
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const { mutate: loginMutate } = useMutation({
+  const navigate = useNavigate();
+  const { mutate: loginMutate, isPending } = useMutation({
     mutationKey: ["login"],
     mutationFn: LoginApi,
+    onSuccess: (data) => {
+      // 跳转到首页
+      navigate({ to: "/layout" });
+    },
   });
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    // TODO: integrate API
+  // 1. Define your form.
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      username: "jincm1",
+      password: "jincm123",
+    },
+  });
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
     loginMutate({
-      username: "admin",
-      password: "123456",
+      username: values.username,
+      password: values.password,
     });
   }
-
   return (
     <div className="min-h-screen bg-background">
       {/* 主要内容区域 */}
@@ -69,39 +109,42 @@ function RouteComponent() {
             </CardHeader>
 
             <CardContent className="px-6 sm:px-8 pb-6">
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="space-y-2">
-                  <Label htmlFor="email">邮箱</Label>
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    placeholder="name@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    className="h-12"
+              <Form {...form}>
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="space-y-8"
+                >
+                  <FormField
+                    control={form.control}
+                    name="username"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>用户名</FormLabel>
+                        <FormControl>
+                          <Input placeholder="请输入用户名" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="password">密码</Label>
-                  <Input
-                    id="password"
+                  <FormField
+                    control={form.control}
                     name="password"
-                    type="password"
-                    placeholder="请输入密码"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    className="h-12"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>密码</FormLabel>
+                        <FormControl>
+                          <Input placeholder="请输入密码" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
-                </div>
-
-                <Button type="submit" className="w-full h-12">
-                  登录
-                </Button>
-              </form>
+                  <Button loading={isPending} type="submit" className="w-full">
+                    Submit
+                  </Button>
+                </form>
+              </Form>
             </CardContent>
 
             <CardFooter className="justify-center pb-8 pt-4 px-6 sm:px-8">

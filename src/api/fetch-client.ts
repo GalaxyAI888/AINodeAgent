@@ -3,7 +3,7 @@ import { isObject } from "@/share/is/isTypings";
 import Path from "@/share/path";
 
 export default class FetchClient {
-  private static baseUrl = import.meta.env.VITE_BASE_API_URL;
+  private static baseUrl = import.meta.env.PROD ? import.meta.env.VITE_BASE_API_URL : '/api';
 
   private static async baseFetch<T>(url: string, options: Api.BaseOptions): Promise<T> {
     const { data, ...rest } = options;
