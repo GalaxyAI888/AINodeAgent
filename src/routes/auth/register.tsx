@@ -1,4 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 import {
   Card,
   CardContent,
@@ -7,23 +11,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { FormProvider, useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from "@/components/ui/form";
+import { MyForm } from "@/components/pages/auth/my-form";
 
 export const Route = createFileRoute("/auth/register")({
   component: RouteComponent,
 });
-
-const Form = FormProvider;
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -96,161 +89,48 @@ function RouteComponent() {
             </CardHeader>
 
             <CardContent className="px-6 sm:px-8 pb-6">
-              <Form {...form}>
-                <form
-                  onSubmit={form.handleSubmit(onSubmit)}
-                  className="space-y-6"
-                >
-                  <FormField
-                    control={form.control}
-                    name="username"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>用户名</FormLabel>
-                        <FormControl>
-                          <Input placeholder="请输入用户名" {...field} />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="password"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>密码</FormLabel>
-                        <FormControl>
-                          <Input placeholder="请输入密码" {...field} />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="confirmPassword"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>确认密码</FormLabel>
-                        <FormControl>
-                          <Input placeholder="请输入确认密码" {...field} />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>邮箱</FormLabel>
-                        <FormControl>
-                          <Input placeholder="请输入邮箱" {...field} />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="verification_code"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>验证码</FormLabel>
-                        <FormControl>
-                          <Input placeholder="请输入验证码" {...field} />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="aff_code"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>邀请码</FormLabel>
-                        <FormControl>
-                          <div className="flex items-center gap-2">
-                            <Input placeholder="请输入邀请码" {...field} />
-                            <Button variant="outline" size="sm">
-                              获取验证码
-                            </Button>
-                          </div>
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-
-                  <Button loading={true} type="submit" className="w-full">
-                    Submit
-                  </Button>
-                </form>
-              </Form>
-              {/* <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="space-y-2">
-                  <Label htmlFor="name">姓名</Label>
-                  <Input
-                    id="name"
-                    name="name"
-                    placeholder="请输入您的姓名"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required
-                    className="h-12"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="email">邮箱</Label>
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    placeholder="name@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    className="h-12"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="password">密码</Label>
-                  <Input
-                    id="password"
-                    name="password"
-                    type="password"
-                    placeholder="至少 6 位"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    minLength={6}
-                    className="h-12"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="confirmPassword">确认密码</Label>
-                  <Input
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    type="password"
-                    placeholder="再次输入密码"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    required
-                    minLength={6}
-                    className="h-12"
-                  />
-                </div>
-
-                <Button type="submit" className="w-full h-12">
-                  注册
-                </Button>
-              </form> */}
+              <MyForm
+                form={form}
+                onSubmit={onSubmit}
+                loading={false}
+                formItems={[
+                  {
+                    name: "username",
+                    label: "用户名",
+                    placeholder: "请输入用户名",
+                  },
+                  {
+                    name: "password",
+                    label: "密码",
+                    placeholder: "请输入密码",
+                  },
+                  {
+                    name: "confirmPassword",
+                    label: "确认密码",
+                    placeholder: "请输入确认密码",
+                  },
+                  {
+                    name: "email",
+                    label: "邮箱",
+                    placeholder: "请输入邮箱",
+                  },
+                  {
+                    name: "verification_code",
+                    label: "验证码",
+                    placeholder: "请输入验证码",
+                    suffix: (
+                      <Button variant="outline" size="sm">
+                        获取验证码
+                      </Button>
+                    ),
+                  },
+                  {
+                    name: "aff_code",
+                    label: "邀请码",
+                    placeholder: "请输入邀请码",
+                  },
+                ]}
+              />
             </CardContent>
 
             <CardFooter className="justify-center pb-8 pt-4 px-6 sm:px-8">

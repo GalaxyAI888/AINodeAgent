@@ -1,4 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useMutation } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Card,
   CardContent,
@@ -7,26 +11,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useMutation } from "@tanstack/react-query";
 import { LoginApi } from "@/api/auth/login";
-import { FormProvider, useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+
+import { MyForm } from "@/components/pages/auth/my-form";
 
 export const Route = createFileRoute("/auth/login")({
   component: RouteComponent,
 });
-
-const Form = FormProvider;
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -108,42 +100,23 @@ function RouteComponent() {
             </CardHeader>
 
             <CardContent className="px-6 sm:px-8 pb-6">
-              <Form {...form}>
-                <form
-                  onSubmit={form.handleSubmit(onSubmit)}
-                  className="space-y-8"
-                >
-                  <FormField
-                    control={form.control}
-                    name="username"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>用户名</FormLabel>
-                        <FormControl>
-                          <Input placeholder="请输入用户名" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="password"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>密码</FormLabel>
-                        <FormControl>
-                          <Input placeholder="请输入密码" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <Button loading={isPending} type="submit" className="w-full">
-                    Submit
-                  </Button>
-                </form>
-              </Form>
+              <MyForm
+                form={form}
+                onSubmit={onSubmit}
+                loading={isPending}
+                formItems={[
+                  {
+                    name: "username",
+                    label: "用户名",
+                    placeholder: "请输入用户名",
+                  },
+                  {
+                    name: "password",
+                    label: "密码",
+                    placeholder: "请输入密码",
+                  },
+                ]}
+              />
             </CardContent>
 
             <CardFooter className="justify-center pb-8 pt-4 px-6 sm:px-8">
