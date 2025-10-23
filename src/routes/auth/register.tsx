@@ -1,4 +1,3 @@
-import * as React from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   Card,
@@ -8,25 +7,60 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { FormProvider, useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@/components/ui/form";
 
 export const Route = createFileRoute("/auth/register")({
   component: RouteComponent,
 });
 
-function RouteComponent() {
-  const [name, setName] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [confirmPassword, setConfirmPassword] = React.useState("");
+const Form = FormProvider;
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    // TODO: integrate API
-    // console.log({ name, email, password, confirmPassword })
-  }
+const formSchema = z.object({
+  username: z.string().min(2, {
+    message: "Name must be at least 2 characters.",
+  }),
+  password: z.string().min(2, {
+    message: "Password must be at least 2 characters.",
+  }),
+  confirmPassword: z.string().min(2, {
+    message: "Confirm password must be at least 2 characters.",
+  }),
+  email: z.string().email({
+    message: "Invalid email address.",
+  }),
+  verification_code: z.string().min(2, {
+    message: "Verification code must be at least 2 characters.",
+  }),
+  // 邀请码
+  aff_code: z.string().min(2, {
+    message: "Aff code must be at least 2 characters.",
+  }),
+});
+
+function RouteComponent() {
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      username: "jincm1",
+      password: "jincm123",
+      confirmPassword: "jincm123",
+      email: "jincm1@example.com",
+      verification_code: "123456",
+      aff_code: "123456",
+    },
+  });
+
+  function onSubmit(values: z.infer<typeof formSchema>) {}
 
   return (
     <div className="min-h-screen bg-background">
@@ -62,7 +96,100 @@ function RouteComponent() {
             </CardHeader>
 
             <CardContent className="px-6 sm:px-8 pb-6">
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <Form {...form}>
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="space-y-6"
+                >
+                  <FormField
+                    control={form.control}
+                    name="username"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>用户名</FormLabel>
+                        <FormControl>
+                          <Input placeholder="请输入用户名" {...field} />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>密码</FormLabel>
+                        <FormControl>
+                          <Input placeholder="请输入密码" {...field} />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="confirmPassword"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>确认密码</FormLabel>
+                        <FormControl>
+                          <Input placeholder="请输入确认密码" {...field} />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>邮箱</FormLabel>
+                        <FormControl>
+                          <Input placeholder="请输入邮箱" {...field} />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="verification_code"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>验证码</FormLabel>
+                        <FormControl>
+                          <Input placeholder="请输入验证码" {...field} />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="aff_code"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>邀请码</FormLabel>
+                        <FormControl>
+                          <div className="flex items-center gap-2">
+                            <Input placeholder="请输入邀请码" {...field} />
+                            <Button variant="outline" size="sm">
+                              获取验证码
+                            </Button>
+                          </div>
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+
+                  <Button loading={true} type="submit" className="w-full">
+                    Submit
+                  </Button>
+                </form>
+              </Form>
+              {/* <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="space-y-2">
                   <Label htmlFor="name">姓名</Label>
                   <Input
@@ -123,7 +250,7 @@ function RouteComponent() {
                 <Button type="submit" className="w-full h-12">
                   注册
                 </Button>
-              </form>
+              </form> */}
             </CardContent>
 
             <CardFooter className="justify-center pb-8 pt-4 px-6 sm:px-8">

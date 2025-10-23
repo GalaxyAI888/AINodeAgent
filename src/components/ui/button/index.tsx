@@ -4,7 +4,7 @@ import { type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "./buttonVariants";
-import { Loader2 } from "lucide-react";
+import { Spinner } from "../spinner";
 
 function Button({
   className,
@@ -28,7 +28,7 @@ function Button({
       {...props}
     >
       <span className="flex items-center gap-2">
-        {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
+        {loading ? <Spinner /> : null}
         {props.children}
       </span>
     </Comp>
