@@ -1,0 +1,70 @@
+name: CI
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    branches:
+      - main
+      - develop
+      - release/**
+    paths-ignore:
+      - "**/*.md"
+      - "**/*.MD"
+  push:
+    branches:
+      - develop
+      - feature/**
+      - hotfix/**
+      - bugfix/**
+    paths-ignore:
+      - "**/*.md"
+      - "**/*.MD"
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Install, Typecheck and Build
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false || github.event_name != 'pull_request'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: yarn
+
+      - name: Install dependencies (Yarn, lockfile respected)
+        run: |
+          yarn --version
+          # Try yarn classic first; fall back to modern flag if needed
+          yarn install --frozen-lockfile || yarn install --immutable
+
+      - name: Show env info
+        run: |
+          node -v
+          yarn -v
+
+      - name: Lint (if config exists)
+        if: ${{ hashFiles('eslint.config.*', '.eslintrc*') != '' }}
+        run: yarn lint
+
+      - name: Typecheck
+        run: npx tsc -b --noEmit --pretty false
+
+      - name: Build
+        run: yarn build
+
+      - name: Upload dist artifact
+        if: ${{ github.event_name == 'push' || github.event_name == 'pull_request' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-dist-${{ github.ref_name }}-${{ github.sha }}
+          path: |
+            dist
+          if-no-files-found: error
