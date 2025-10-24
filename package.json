@@ -7,9 +7,10 @@
   "scripts": {
     "dev": "vite",
     "dev:electron": "npm run dev &electron .",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build --mode staging",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:prod": "tsc -b && vite build"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
