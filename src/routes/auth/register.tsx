@@ -53,7 +53,7 @@ function RouteComponent() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {}
+  function onSubmit() {}
 
   return (
     <div className="min-h-screen bg-background">

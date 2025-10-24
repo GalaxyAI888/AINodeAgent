@@ -2,7 +2,7 @@ import * as React from "react";
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { isAuthenticated } from "@/lib/auth";
 import { cn } from "@/lib/utils";
-import { useAuth } from "@/contexts/AuthContext.tsx";
+import { useAuth } from "@/contexts/useAuth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {

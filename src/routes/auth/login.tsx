@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { LoginApi } from "@/api/auth/login";
-import { useAuth } from "@/contexts/AuthContext.tsx";
+import { useAuth } from "@/contexts/useAuth";
 import { isAuthenticated } from "@/lib/auth";
 
 import { MyForm } from "@/components/pages/auth/my-form";
