@@ -6,6 +6,7 @@
   "main": "electron/main.cjs",
   "scripts": {
     "dev": "vite",
+    "dev:staging": "vite --mode staging",
     "dev:electron": "npm run dev &electron .",
     "build": "tsc -b && vite build --mode staging",
     "lint": "eslint .",
