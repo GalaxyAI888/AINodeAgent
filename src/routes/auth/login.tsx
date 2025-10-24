@@ -1,4 +1,9 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  Link,
+  useNavigate,
+  redirect,
+} from "@tanstack/react-router";
 import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -13,10 +18,18 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { LoginApi } from "@/api/auth/login";
+import { useAuth } from "@/contexts/AuthContext";
+import { isAuthenticated } from "@/lib/auth";
 
 import { MyForm } from "@/components/pages/auth/my-form";
 
 export const Route = createFileRoute("/auth/login")({
+  beforeLoad: () => {
+    // 如果已认证，重定向到 layout 页面
+    if (isAuthenticated()) {
+      throw redirect({ to: "/layout" });
+    }
+  },
   component: RouteComponent,
 });
 
@@ -43,11 +56,14 @@ const formSchema = z.object({
 
 function RouteComponent() {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const { mutate: loginMutate, isPending } = useMutation({
     mutationKey: ["login"],
     mutationFn: LoginApi,
     onSuccess: (data) => {
-      // 跳转到首页
+      // 保存用户信息和 token
+      login(data);
+      // 跳转到 layout 页面
       navigate({ to: "/layout" });
     },
   });

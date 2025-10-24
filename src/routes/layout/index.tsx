@@ -1,6 +1,8 @@
 import * as React from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
+import { isAuthenticated } from "@/lib/auth";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -31,6 +33,13 @@ import {
 } from "lucide-react";
 
 export const Route = createFileRoute("/layout/")({
+  beforeLoad: () => {
+    // 检查是否已认证
+    if (!isAuthenticated()) {
+      // 如果未认证，重定向到登录页面
+      throw redirect({ to: "/auth/login" });
+    }
+  },
   component: RouteComponent,
 });
 
@@ -79,6 +88,13 @@ function SidebarItem({
 
 function RouteComponent() {
   const [collapsed, setCollapsed] = React.useState(false);
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate({ to: "/auth/login" });
+  };
 
   return (
     <div className="min-h-svh w-full bg-background text-foreground">
@@ -123,7 +139,10 @@ function RouteComponent() {
           </nav>
 
           <div className="mt-auto p-3">
-            <Card>
+            <Card
+              className="cursor-pointer hover:bg-muted/50 transition-colors"
+              onClick={handleLogout}
+            >
               <CardContent className="px-4 py-3">
                 <div
                   className={cn(
@@ -133,8 +152,12 @@ function RouteComponent() {
                 >
                   <User className="size-6" />
                   <div className={cn("text-sm", collapsed && "sr-only")}>
-                    <div className="font-medium">admin</div>
-                    <div className="text-muted-foreground">尊贵用户 · 500</div>
+                    <div className="font-medium">
+                      {user?.username || "用户"}
+                    </div>
+                    <div className="text-muted-foreground">
+                      {user?.display_name || "尊贵用户"} · {user?.quota || 0}
+                    </div>
                   </div>
                 </div>
               </CardContent>
