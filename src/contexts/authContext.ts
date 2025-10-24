@@ -24,8 +24,8 @@ export interface AuthContextType {
 export const AuthContext = createContext<AuthContextType>({
   isAuthenticated: false,
   user: null,
-  setIsAuthenticated: () => {},
-  setUser: () => {},
+  setIsAuthenticated: () => { },
+  setUser: () => { },
   login: async () => false,
-  logout: () => {},
+  logout: () => { },
 });
