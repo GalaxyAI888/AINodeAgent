@@ -1,27 +1,34 @@
 import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
-import { Toaster } from 'sonner';
-import App from "./App.tsx";
+import ReactDOM from "react-dom/client";
 import "./index.css";
+import { RouterProvider, createRouter } from "@tanstack/react-router";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
-// 为Electron环境设置基本路径
-const setBaseUrl = () => {
-  // 检查是否在Electron环境中
-  if (window.process && window.process.type === 'renderer') {
-    const baseUrl = document.createElement('base');
-    baseUrl.href = './';
-    document.head.appendChild(baseUrl);
+// Import the generated route tree
+import { routeTree } from "./routeTree.gen";
+
+// Create a new router instance
+const router = createRouter({ routeTree });
+const queryClient = new QueryClient();
+
+// Register the router instance for type safety
+declare module "@tanstack/react-router" {
+  interface Register {
+    router: typeof router;
   }
-};
+}
 
-setBaseUrl();
-
-createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <BrowserRouter>
-      <App />
-      <Toaster />
-    </BrowserRouter>
-  </StrictMode>
-);
+// Render the app
+const rootElement = document.getElementById("root")!;
+if (!rootElement.innerHTML) {
+  const root = ReactDOM.createRoot(rootElement);
+  root.render(
+    <StrictMode>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+        <ReactQueryDevtools position="top" />
+      </QueryClientProvider>
+    </StrictMode>
+  );
+}
