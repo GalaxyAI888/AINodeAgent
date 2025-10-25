@@ -1,4 +1,5 @@
 import { getCloudAppMarketList } from "@/api/home/cloud-app-market";
+import Wrapper from "@/components/pages/wrapper";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -103,22 +104,26 @@ function RouteComponent() {
   console.log(data);
 
   return (
-    <Card className="h-full flex flex-col">
-      <CardHeader>
-        <CardTitle>模型市场</CardTitle>
-        <CardDescription>模型市场是分享和发现模型的平台。</CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-4">
+    <Wrapper className="space-y-4">
+      <div className="">
+        <h2 className="text-2xl font-bold">模型市场</h2>
+        <p className="text-sm text-muted-foreground">
+          模型市场是分享和发现模型的平台。
+        </p>
+      </div>
+      <div className="space-y-4">
         <NavigationView
           category={category}
           setCategory={setCategory}
           search={search}
           setSearch={setSearch}
         />
-        <ModelList models={MODELS} />
+        <ModelList
+          models={MODELS.concat(MODELS).concat(MODELS).concat(MODELS)}
+        />
         <Pagination />
-      </CardContent>
-    </Card>
+      </div>
+    </Wrapper>
   );
 }
 

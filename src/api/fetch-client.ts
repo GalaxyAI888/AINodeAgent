@@ -28,6 +28,7 @@ export default class FetchClient {
         ...rest,
         headers: {
           ...options.headers,
+          'Content-Type': 'application/json',
           'X-Parse-Application-Id': "BTGAPPID",
           'X-Parse-REST-API-Key': "BTGAPPKEY",
         },

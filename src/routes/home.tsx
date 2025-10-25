@@ -170,9 +170,13 @@ function RouteComponent() {
   return (
     <SidebarProvider>
       <AppSidebar items={navMain} />
-      <SidebarInset>
-        <BreadcrumbHeader breadcrumb={breadcrumb} />
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+      <SidebarInset className="bg-sidebar">
+        {/* 固定头部 */}
+        <div className="fixed top-0 right-0 z-10 bg-sidebar border-b w-[calc(100%-var(--sidebar-width))]">
+          <BreadcrumbHeader breadcrumb={breadcrumb} />
+        </div>
+        {/* 内容 */}
+        <div className="flex flex-1 flex-col gap-4 mt-20 bg-sidebar">
           <Outlet />
         </div>
       </SidebarInset>
