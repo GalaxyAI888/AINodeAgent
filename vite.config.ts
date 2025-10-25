@@ -45,10 +45,15 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      '/api': {
+      '/api_1': {
         target: "http://www.byteverse.vip/oneapi",
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
+        rewrite: (path) => path.replace(/^\/api_1/, ''),
+      },
+      '/api_2': {
+        target: "http://8.130.135.47/parseapi",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api_2/, ''),
       },
     },
   }

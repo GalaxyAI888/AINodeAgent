@@ -35,7 +35,6 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import type { FileRoutesByTo } from "@/routeTree.gen";
-import { useRouterState } from "@tanstack/react-router";
 
 export interface NavItem {
   title: string;

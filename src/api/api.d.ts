@@ -24,9 +24,14 @@ namespace Api {
   interface PostOptions extends BaseOptions {
     method?: 'POST';
   }
+  interface GetOptions extends BaseOptions {
+    method?: 'GET';
+  }
+
   interface BaseOptions extends Omit<RequestInit, 'method'> {
     method: RequestMethod;
     params?: AnyObject;
+    apiType?: "authApi" | "parseApi";
     data?: AnyObject;
   }
 }

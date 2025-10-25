@@ -1,3 +1,4 @@
+import { getCloudAppMarketList } from "@/api/home/cloud-app-market";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,6 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Pagination } from "@/components/ui/pagination";
+import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { Download, HardDrive, Star, Tag } from "lucide-react";
 import { useState } from "react";
@@ -93,6 +95,12 @@ const MODELS = [
 function RouteComponent() {
   const [category, setCategory] = useState<string>("all");
   const [search, setSearch] = useState<string>("");
+  const { data, isLoading } = useQuery({
+    queryKey: ["cloud-app-market-list"],
+    queryFn: () => getCloudAppMarketList({ limit: 10, skip: 0 }),
+  });
+
+  console.log(data);
 
   return (
     <Card className="h-full flex flex-col">
