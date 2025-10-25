@@ -9,27 +9,39 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as HomeRouteImport } from './routes/home'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as HomeIndexRouteImport } from './routes/home/index'
-import { Route as HomeIndexBkRouteImport } from './routes/home/index-bk'
+import { Route as HomeCloudModelMarketcopyRouteImport } from './routes/home/cloud-model-market copy'
+import { Route as HomeCloudModelMarketRouteImport } from './routes/home/cloud-model-market'
+import { Route as HomeCloudAppMarketRouteImport } from './routes/home/cloud-app-market'
 import { Route as AuthRegisterRouteImport } from './routes/auth/register'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
-import { Route as HomeAppMarketIndexRouteImport } from './routes/home/app-market/index'
 
+const HomeRoute = HomeRouteImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const HomeIndexRoute = HomeIndexRouteImport.update({
-  id: '/home/',
-  path: '/home/',
-  getParentRoute: () => rootRouteImport,
+const HomeCloudModelMarketcopyRoute =
+  HomeCloudModelMarketcopyRouteImport.update({
+    id: '/cloud-model-market copy',
+    path: '/cloud-model-market copy',
+    getParentRoute: () => HomeRoute,
+  } as any)
+const HomeCloudModelMarketRoute = HomeCloudModelMarketRouteImport.update({
+  id: '/cloud-model-market',
+  path: '/cloud-model-market',
+  getParentRoute: () => HomeRoute,
 } as any)
-const HomeIndexBkRoute = HomeIndexBkRouteImport.update({
-  id: '/home/index-bk',
-  path: '/home/index-bk',
-  getParentRoute: () => rootRouteImport,
+const HomeCloudAppMarketRoute = HomeCloudAppMarketRouteImport.update({
+  id: '/cloud-app-market',
+  path: '/cloud-app-market',
+  getParentRoute: () => HomeRoute,
 } as any)
 const AuthRegisterRoute = AuthRegisterRouteImport.update({
   id: '/auth/register',
@@ -41,75 +53,81 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
   path: '/auth/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const HomeAppMarketIndexRoute = HomeAppMarketIndexRouteImport.update({
-  id: '/home/app-market/',
-  path: '/home/app-market/',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/home': typeof HomeRouteWithChildren
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
-  '/home/index-bk': typeof HomeIndexBkRoute
-  '/home': typeof HomeIndexRoute
-  '/home/app-market': typeof HomeAppMarketIndexRoute
+  '/home/cloud-app-market': typeof HomeCloudAppMarketRoute
+  '/home/cloud-model-market': typeof HomeCloudModelMarketRoute
+  '/home/cloud-model-market copy': typeof HomeCloudModelMarketcopyRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/home': typeof HomeRouteWithChildren
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
-  '/home/index-bk': typeof HomeIndexBkRoute
-  '/home': typeof HomeIndexRoute
-  '/home/app-market': typeof HomeAppMarketIndexRoute
+  '/home/cloud-app-market': typeof HomeCloudAppMarketRoute
+  '/home/cloud-model-market': typeof HomeCloudModelMarketRoute
+  '/home/cloud-model-market copy': typeof HomeCloudModelMarketcopyRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/home': typeof HomeRouteWithChildren
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
-  '/home/index-bk': typeof HomeIndexBkRoute
-  '/home/': typeof HomeIndexRoute
-  '/home/app-market/': typeof HomeAppMarketIndexRoute
+  '/home/cloud-app-market': typeof HomeCloudAppMarketRoute
+  '/home/cloud-model-market': typeof HomeCloudModelMarketRoute
+  '/home/cloud-model-market copy': typeof HomeCloudModelMarketcopyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/home'
     | '/auth/login'
     | '/auth/register'
-    | '/home/index-bk'
-    | '/home'
-    | '/home/app-market'
+    | '/home/cloud-app-market'
+    | '/home/cloud-model-market'
+    | '/home/cloud-model-market copy'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/home'
     | '/auth/login'
     | '/auth/register'
-    | '/home/index-bk'
-    | '/home'
-    | '/home/app-market'
+    | '/home/cloud-app-market'
+    | '/home/cloud-model-market'
+    | '/home/cloud-model-market copy'
   id:
     | '__root__'
     | '/'
+    | '/home'
     | '/auth/login'
     | '/auth/register'
-    | '/home/index-bk'
-    | '/home/'
-    | '/home/app-market/'
+    | '/home/cloud-app-market'
+    | '/home/cloud-model-market'
+    | '/home/cloud-model-market copy'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  HomeRoute: typeof HomeRouteWithChildren
   AuthLoginRoute: typeof AuthLoginRoute
   AuthRegisterRoute: typeof AuthRegisterRoute
-  HomeIndexBkRoute: typeof HomeIndexBkRoute
-  HomeIndexRoute: typeof HomeIndexRoute
-  HomeAppMarketIndexRoute: typeof HomeAppMarketIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/home': {
+      id: '/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof HomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -117,19 +135,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/home/': {
-      id: '/home/'
-      path: '/home'
-      fullPath: '/home'
-      preLoaderRoute: typeof HomeIndexRouteImport
-      parentRoute: typeof rootRouteImport
+    '/home/cloud-model-market copy': {
+      id: '/home/cloud-model-market copy'
+      path: '/cloud-model-market copy'
+      fullPath: '/home/cloud-model-market copy'
+      preLoaderRoute: typeof HomeCloudModelMarketcopyRouteImport
+      parentRoute: typeof HomeRoute
     }
-    '/home/index-bk': {
-      id: '/home/index-bk'
-      path: '/home/index-bk'
-      fullPath: '/home/index-bk'
-      preLoaderRoute: typeof HomeIndexBkRouteImport
-      parentRoute: typeof rootRouteImport
+    '/home/cloud-model-market': {
+      id: '/home/cloud-model-market'
+      path: '/cloud-model-market'
+      fullPath: '/home/cloud-model-market'
+      preLoaderRoute: typeof HomeCloudModelMarketRouteImport
+      parentRoute: typeof HomeRoute
+    }
+    '/home/cloud-app-market': {
+      id: '/home/cloud-app-market'
+      path: '/cloud-app-market'
+      fullPath: '/home/cloud-app-market'
+      preLoaderRoute: typeof HomeCloudAppMarketRouteImport
+      parentRoute: typeof HomeRoute
     }
     '/auth/register': {
       id: '/auth/register'
@@ -145,23 +170,28 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/home/app-market/': {
-      id: '/home/app-market/'
-      path: '/home/app-market'
-      fullPath: '/home/app-market'
-      preLoaderRoute: typeof HomeAppMarketIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
+interface HomeRouteChildren {
+  HomeCloudAppMarketRoute: typeof HomeCloudAppMarketRoute
+  HomeCloudModelMarketRoute: typeof HomeCloudModelMarketRoute
+  HomeCloudModelMarketcopyRoute: typeof HomeCloudModelMarketcopyRoute
+}
+
+const HomeRouteChildren: HomeRouteChildren = {
+  HomeCloudAppMarketRoute: HomeCloudAppMarketRoute,
+  HomeCloudModelMarketRoute: HomeCloudModelMarketRoute,
+  HomeCloudModelMarketcopyRoute: HomeCloudModelMarketcopyRoute,
+}
+
+const HomeRouteWithChildren = HomeRoute._addFileChildren(HomeRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  HomeRoute: HomeRouteWithChildren,
   AuthLoginRoute: AuthLoginRoute,
   AuthRegisterRoute: AuthRegisterRoute,
-  HomeIndexBkRoute: HomeIndexBkRoute,
-  HomeIndexRoute: HomeIndexRoute,
-  HomeAppMarketIndexRoute: HomeAppMarketIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
