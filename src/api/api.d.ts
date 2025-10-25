@@ -11,12 +11,12 @@ namespace Api {
   type PageType = "PAGE" | "NO_PAGE";
 
   type BaseParams<T extends PageType, IParams extends AnyObject> = T extends "PAGE" ? {
-    pageNum: number;
-    pageSize: number;
+    limit?: number;
+    skip?: number;
   } & IParams : IParams;
 
   type BaseData<T extends PageType, IList extends AnyObject> = T extends "PAGE" ? Partial<{
-    records: IList[];
+    results: IList[];
     current: number;
     size: number;
     total: number;

@@ -29,8 +29,8 @@ export default class FetchClient {
         headers: {
           ...options.headers,
           'Content-Type': 'application/json',
-          'X-Parse-Application-Id': "BTGAPPID",
-          'X-Parse-REST-API-Key': "BTGAPPKEY",
+          'X-Parse-Application-Id': "BTGAPPId",
+          'X-Parse-REST-API-Key': "BTGAPIKEY",
         },
         ...(isBlanks(data) ? {} : { body: JSON.stringify(data) }),
       }).then(response => response.json()).then(resolve).catch(reject);

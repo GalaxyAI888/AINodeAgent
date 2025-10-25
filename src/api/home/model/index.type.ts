@@ -1,10 +1,12 @@
 export interface CloudApp {
-  id: string;
+  createdAt: Date;
+  description: string;
+  icon: string;
+  modelscope_path: string;
+  modelsize: string;
   name: string;
-  desc: string;
-  dockerImage: string;
-  dockerfileUrl: string;
-  stars: number;
-  downloads: number;
-  category: string;
+  objectId: string;
+  path: string;
+  tags: string[];
+  updatedAt: Date;
 }
