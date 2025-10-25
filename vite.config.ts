@@ -20,6 +20,29 @@ export default defineConfig({
       "@": path.resolve(__dirname, "src"),
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: (id) => {
+          if (!id.includes('node_modules')) return
+
+          if (id.includes('@tanstack/react-router-devtools')) return 'react-router-devtools'
+          if (id.includes('@tanstack/react-query-devtools')) return 'react-query-devtools'
+          if (id.includes('@tanstack/react-router')) return 'react-router'
+          if (id.includes('@tanstack/react-query')) return 'react-query'
+          if (id.includes('react-dom') || id.includes('react')) return 'react'
+
+          const m = id.replace(/\\/g, '/')
+            .match(/node_modules\/(?:\.pnpm\/[^/]+\/node_modules\/)?(@[^/]+\/[^/]+|[^/]+)/)
+          const pkg = (m?.[1] ?? 'vendor').replace('@', '').replace('/', '-')
+          return pkg
+        },
+        chunkFileNames: 'assets/js/[name]-[hash].js',
+        assetFileNames: 'assets/media/[name]-[hash].[ext]',
+        entryFileNames: 'assets/js/[name]-[hash].js',
+      },
+    },
+  },
   server: {
     proxy: {
       '/api': {

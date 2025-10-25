@@ -27,7 +27,7 @@ export const Route = createFileRoute("/auth/login")({
   beforeLoad: () => {
     // 如果已认证，重定向到 layout 页面
     if (isAuthenticated()) {
-      throw redirect({ to: "/layout" });
+      throw redirect({ to: "/home" });
     }
   },
   component: RouteComponent,
@@ -64,7 +64,7 @@ function RouteComponent() {
       // 保存用户信息和 token
       login(data);
       // 跳转到 layout 页面
-      navigate({ to: "/layout" });
+      navigate({ to: "/home" });
     },
   });
 

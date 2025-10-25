@@ -10,18 +10,25 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as LayoutIndexRouteImport } from './routes/layout/index'
+import { Route as HomeIndexRouteImport } from './routes/home/index'
+import { Route as HomeIndexBkRouteImport } from './routes/home/index-bk'
 import { Route as AuthRegisterRouteImport } from './routes/auth/register'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
+import { Route as HomeAppMarketIndexRouteImport } from './routes/home/app-market/index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LayoutIndexRoute = LayoutIndexRouteImport.update({
-  id: '/layout/',
-  path: '/layout/',
+const HomeIndexRoute = HomeIndexRouteImport.update({
+  id: '/home/',
+  path: '/home/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HomeIndexBkRoute = HomeIndexBkRouteImport.update({
+  id: '/home/index-bk',
+  path: '/home/index-bk',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRegisterRoute = AuthRegisterRouteImport.update({
@@ -34,39 +41,71 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
   path: '/auth/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HomeAppMarketIndexRoute = HomeAppMarketIndexRouteImport.update({
+  id: '/home/app-market/',
+  path: '/home/app-market/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
-  '/layout': typeof LayoutIndexRoute
+  '/home/index-bk': typeof HomeIndexBkRoute
+  '/home': typeof HomeIndexRoute
+  '/home/app-market': typeof HomeAppMarketIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
-  '/layout': typeof LayoutIndexRoute
+  '/home/index-bk': typeof HomeIndexBkRoute
+  '/home': typeof HomeIndexRoute
+  '/home/app-market': typeof HomeAppMarketIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
-  '/layout/': typeof LayoutIndexRoute
+  '/home/index-bk': typeof HomeIndexBkRoute
+  '/home/': typeof HomeIndexRoute
+  '/home/app-market/': typeof HomeAppMarketIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth/login' | '/auth/register' | '/layout'
+  fullPaths:
+    | '/'
+    | '/auth/login'
+    | '/auth/register'
+    | '/home/index-bk'
+    | '/home'
+    | '/home/app-market'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth/login' | '/auth/register' | '/layout'
-  id: '__root__' | '/' | '/auth/login' | '/auth/register' | '/layout/'
+  to:
+    | '/'
+    | '/auth/login'
+    | '/auth/register'
+    | '/home/index-bk'
+    | '/home'
+    | '/home/app-market'
+  id:
+    | '__root__'
+    | '/'
+    | '/auth/login'
+    | '/auth/register'
+    | '/home/index-bk'
+    | '/home/'
+    | '/home/app-market/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthLoginRoute: typeof AuthLoginRoute
   AuthRegisterRoute: typeof AuthRegisterRoute
-  LayoutIndexRoute: typeof LayoutIndexRoute
+  HomeIndexBkRoute: typeof HomeIndexBkRoute
+  HomeIndexRoute: typeof HomeIndexRoute
+  HomeAppMarketIndexRoute: typeof HomeAppMarketIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -78,11 +117,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/layout/': {
-      id: '/layout/'
-      path: '/layout'
-      fullPath: '/layout'
-      preLoaderRoute: typeof LayoutIndexRouteImport
+    '/home/': {
+      id: '/home/'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof HomeIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/home/index-bk': {
+      id: '/home/index-bk'
+      path: '/home/index-bk'
+      fullPath: '/home/index-bk'
+      preLoaderRoute: typeof HomeIndexBkRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth/register': {
@@ -99,6 +145,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/home/app-market/': {
+      id: '/home/app-market/'
+      path: '/home/app-market'
+      fullPath: '/home/app-market'
+      preLoaderRoute: typeof HomeAppMarketIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -106,7 +159,9 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthRegisterRoute: AuthRegisterRoute,
-  LayoutIndexRoute: LayoutIndexRoute,
+  HomeIndexBkRoute: HomeIndexBkRoute,
+  HomeIndexRoute: HomeIndexRoute,
+  HomeAppMarketIndexRoute: HomeAppMarketIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -30,9 +30,11 @@ import {
   Image as ImageIcon,
   Type,
   User,
+  AppWindow,
 } from "lucide-react";
+import type { FileRoutesByTo } from "@/routeTree.gen";
 
-export const Route = createFileRoute("/layout/")({
+export const Route = createFileRoute("/home/index-bk")({
   beforeLoad: () => {
     // 检查是否已认证
     if (!isAuthenticated()) {
@@ -45,21 +47,22 @@ export const Route = createFileRoute("/layout/")({
 
 type NavItem = {
   label: string;
-  href: string;
+  href: keyof FileRoutesByTo;
   Icon: React.ComponentType<{ className?: string }>;
 };
 
 const navItems: NavItem[] = [
-  { label: "仪表盘", href: "#", Icon: LayoutDashboard },
-  { label: "集群管理", href: "#", Icon: Server },
-  { label: "云端模型市场", href: "#", Icon: Cloud },
-  { label: "资源监控", href: "#", Icon: Activity },
-  { label: "GPU 管理", href: "#", Icon: Cpu },
-  { label: "本地模型管理", href: "#", Icon: Boxes },
-  { label: "任务管理", href: "#", Icon: ListChecks },
-  { label: "链路负载", href: "#", Icon: LinkIcon },
-  { label: "日志记录", href: "#", Icon: FileText },
-  { label: "设置", href: "#", Icon: SettingsIcon },
+  { label: "仪表盘", href: "/", Icon: LayoutDashboard },
+  { label: "集群管理", href: "/", Icon: Server },
+  { label: "云端模型市场", href: "/", Icon: Cloud },
+  { label: "云端AI应用市场", href: "/home/app-market", Icon: AppWindow },
+  { label: "资源监控", href: "/", Icon: Activity },
+  { label: "GPU 管理", href: "/", Icon: Cpu },
+  { label: "本地模型管理", href: "/", Icon: Boxes },
+  { label: "任务管理", href: "/", Icon: ListChecks },
+  { label: "链路负载", href: "/", Icon: LinkIcon },
+  { label: "日志记录", href: "/", Icon: FileText },
+  { label: "设置", href: "/", Icon: SettingsIcon },
 ];
 
 function SidebarItem({
