@@ -12,7 +12,15 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Pagination } from "@/components/ui/pagination";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { Download, HardDrive, Tag } from "lucide-react";
@@ -42,58 +50,6 @@ const CATEGORIES = [
     value: "image-enhancement",
   },
 ];
-
-// const MODELS = [
-//   {
-//     name: "Stable Diffusion 3",
-//     description: "先进的文本到图像生成模型，支持高质量图像生成",
-//     category: "图像生成",
-//     downloads: 100000,
-//     score: 9.5,
-//     sizeGB: 8.9,
-//   },
-//   {
-//     name: "Flux 3",
-//     description: "新一代高质量图像生成模型，具有更强的想象力",
-//     category: "图像生成",
-//     downloads: 80000,
-//     score: 9.2,
-//     sizeGB: 12.3,
-//   },
-//   {
-//     name: "Whisper",
-//     description: "多语言音频识别模型，支持自动语音转文字",
-//     category: "语音识别",
-//     downloads: 60000,
-//     score: 9.7,
-//     sizeGB: 2.8,
-//   },
-//   {
-//     name: "LLaMA 3",
-//     description: "高性能开源大语言模型，支持多种任务和应用场景",
-//     category: "大语言模型",
-//     downloads: 40000,
-//     score: 9.6,
-//     sizeGB: 14.5,
-//   },
-//   {
-//     name: "Mixtral 8x7B",
-//     description: "混合专家模型，具备更高参数效率和性能",
-//     category: "大语言模型",
-//     downloads: 20000,
-//     score: 9.4,
-//     sizeGB: 22.4,
-//   },
-//   {
-//     name: "Gemma",
-//     description: "轻量级开源大语言模型，适合边缘设备部署",
-//     category: "大语言模型",
-//     downloads: 10000,
-//     score: 9.1,
-//     sizeGB: 6.2,
-//   },
-// ];
-
 function RouteComponent() {
   const [category, setCategory] = useState<string>("all");
   const [search, setSearch] = useState<string>("");
@@ -131,8 +87,35 @@ function RouteComponent() {
           />
         </div>
       </Wrapper.Navigation>
-      <ModelList models={data?.results || []} />
-      <Pagination />
+      <Wrapper.Content>
+        <ModelList models={data?.results || []} />
+      </Wrapper.Content>
+      <Wrapper.Footer>
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious href="#" />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink href="#">1</PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink href="#" isActive>
+                2
+              </PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink href="#">3</PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationEllipsis />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationNext href="#" />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      </Wrapper.Footer>
     </Wrapper>
   );
 }
@@ -172,7 +155,7 @@ interface ModelListProps {
 
 function ModelList(props: ModelListProps) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
       {props.models.map((model) => (
         <ModelCard key={model.objectId} model={model} />
       ))}
