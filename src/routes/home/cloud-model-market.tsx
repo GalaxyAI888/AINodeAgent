@@ -155,7 +155,7 @@ interface ModelListProps {
 
 function ModelList(props: ModelListProps) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
       {props.models.map((model) => (
         <ModelCard key={model.objectId} model={model} />
       ))}
@@ -208,7 +208,11 @@ function ModelCard(props: ModelCardProps) {
         </div>
       </CardContent>
       <CardFooter>
-        <Button variant="default" className="w-full">
+        <Button
+          variant="default"
+          className="w-full"
+          // onClick={() => handleDownload(props.model.path)}
+        >
           下载模型
         </Button>
       </CardFooter>
