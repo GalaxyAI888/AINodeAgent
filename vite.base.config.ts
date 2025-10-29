@@ -49,6 +49,11 @@ const BaseConfig = {
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api_2/, ''),
       },
+      'api_3': {
+        target: "http://115.190.25.82:9999",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api_3/, ''),
+      },
     },
   }
 } satisfies UserConfig

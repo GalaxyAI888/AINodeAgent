@@ -7,11 +7,10 @@ export default class FetchClient {
   static API_MAP: Record<NonNullable<Api.BaseOptions['apiType']>, string> = {
     authApi: import.meta.env.VITE_API_AUTH_URL,
     parseApi: import.meta.env.VITE_API_PASE_URL,
+    modelApi: import.meta.env.VITE_API_MODEL_URL,
   }
 
   static baseUrl(type: keyof typeof this.API_MAP) {
-    console.log("import.meta.env", import.meta.env);
-    console.log("this.API_MAP", this.API_MAP);
     return this.API_MAP[type];
   }
 

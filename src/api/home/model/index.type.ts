@@ -10,3 +10,12 @@ export interface CloudApp {
   tags: string[];
   updatedAt: Date;
 }
+
+export interface ModelFile {
+  source: string,
+  worker_id: number,
+  model_scope_model_id: string,
+  model_scope_file_path: string,
+  local_dir: string,
+  cleanup_on_delete: boolean
+}

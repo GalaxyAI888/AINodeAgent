@@ -1,4 +1,7 @@
-import { getCloudAppMarketList } from "@/api/home/cloud-app-market";
+import {
+  downloadModelFile,
+  getCloudAppMarketList,
+} from "@/api/home/cloud-app-market";
 import type { CloudApp } from "@/api/home/model/index.type";
 import { Wrapper } from "@/components/pages/wrapper";
 import { Button } from "@/components/ui/button";
@@ -21,7 +24,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { Download, HardDrive, Tag } from "lucide-react";
 import { useState } from "react";
@@ -168,6 +171,20 @@ interface ModelCardProps {
 }
 
 function ModelCard(props: ModelCardProps) {
+  const { mutate: downloadModelFileMutation } = useMutation({
+    mutationFn: downloadModelFile,
+  });
+
+  const handleDownload = (path: string) => {
+    downloadModelFileMutation({
+      source: "",
+      worker_id: 1,
+      model_scope_model_id: props.model.modelscope_path,
+      model_scope_file_path: props.model.path,
+      local_dir: import.meta.env.VITE_MODEL_DIR,
+      cleanup_on_delete: true,
+    });
+  };
   return (
     <Card>
       <CardHeader>
@@ -211,7 +228,7 @@ function ModelCard(props: ModelCardProps) {
         <Button
           variant="default"
           className="w-full"
-          // onClick={() => handleDownload(props.model.path)}
+          onClick={() => handleDownload(props.model.path)}
         >
           下载模型
         </Button>
