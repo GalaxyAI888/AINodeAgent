@@ -13,7 +13,9 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { useSidebar } from "@/components/ui/useSidebar";
 import { isAuthenticated } from "@/lib/auth";
+import { cn } from "@/lib/utils";
 import type { FileRoutesByTo } from "@/routeTree.gen";
 import { Separator } from "@radix-ui/react-separator";
 import {
@@ -170,19 +172,39 @@ function RouteComponent() {
   return (
     <SidebarProvider>
       <AppSidebar items={navMain} />
-      <SidebarInset className="bg-sidebar">
-        {/* 固定头部 */}
-        <div className="fixed top-0 right-0 z-10 bg-sidebar border-b w-[calc(100%-var(--sidebar-width))]">
-          <BreadcrumbHeader breadcrumb={breadcrumb} />
-        </div>
-        {/* 内容 */}
-        <div className="flex flex-1 flex-col gap-4 mt-20 bg-sidebar">
-          <Outlet />
-        </div>
-      </SidebarInset>
+      <SidebarInsetView breadcrumb={breadcrumb} />
     </SidebarProvider>
   );
 }
+
+function SidebarInsetView({
+  breadcrumb,
+}: {
+  breadcrumb: { label: string; href: keyof FileRoutesByTo }[];
+}) {
+  const { state } = useSidebar();
+  console.log("state", state);
+  return (
+    <SidebarInset className="bg-sidebar">
+      {/* 固定头部 */}
+      <div
+        className={cn(
+          "fixed top-0 right-0 z-10 bg-sidebar border-b w-[calc(100%-var(--sidebar-width))]",
+          state === "collapsed"
+            ? "w-[calc(100%-var(--sidebar-width-icon))]"
+            : "w-[calc(100%-var(--sidebar-width))]"
+        )}
+      >
+        <BreadcrumbHeader breadcrumb={breadcrumb} />
+      </div>
+      {/* 内容 */}
+      <div className="flex flex-1 flex-col gap-4 mt-20 bg-sidebar">
+        <Outlet />
+      </div>
+    </SidebarInset>
+  );
+}
+
 function BreadcrumbHeader({
   breadcrumb,
 }: {
