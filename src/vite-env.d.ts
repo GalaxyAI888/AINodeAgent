@@ -1,10 +1,10 @@
 /// <reference types="vite/client" />
 
-// 扩展全局对象以支持Electron环境
-declare global {
-  interface Window {
-    process: {
-      type: string;
-    }
-  }
+interface ImportMetaEnv {
+  readonly VITE_API_AUTH_URL: string;
+  readonly VITE_API_PASE_URL: string;
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
 }
