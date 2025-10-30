@@ -31,7 +31,7 @@ namespace Api {
   interface BaseOptions extends Omit<RequestInit, 'method'> {
     method: RequestMethod;
     params?: AnyObject;
-    apiType?: "authApi" | "parseApi";
+    apiType?: "authApi" | "parseApi" | "modelApi";
     data?: AnyObject;
   }
 }
